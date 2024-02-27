@@ -1,0 +1,15 @@
+.page {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--bg-color);
+    height: 100vh;
+    padding: 5rem 10vw;
+}
+
+.appName {
+    color: var(--main-color);
+    font-size: var(--heading-fs);
+    font-weight: 600;
+}
