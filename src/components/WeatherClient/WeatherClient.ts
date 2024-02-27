@@ -15,7 +15,7 @@ export default class WeatherClient {
             console.log("result is: ", JSON.stringify(result, null, 4));
             return result;
         } catch (err) {
-            alert("Ошыпка!");
+            alert(`Ошибка: ${err}`);
         }
     }
 }
