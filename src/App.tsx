@@ -1,12 +1,8 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import WeatherApp from './components/WeatherApp';
+import "./App.css";
+import WeatherApp from "./components/WeatherApp";
 
 function App() {
-  return (
-    <WeatherApp/>
-  );
+    return <WeatherApp />;
 }
 
 export default App;

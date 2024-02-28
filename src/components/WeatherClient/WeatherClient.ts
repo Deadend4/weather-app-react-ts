@@ -12,7 +12,23 @@ export default class WeatherClient {
 
             const result = await response.json();
 
-            console.log("result is: ", JSON.stringify(result, null, 4));
+            return result;
+        } catch (err) {
+            alert(`Ошибка: ${err}`);
+        }
+    }
+
+    public async getWeatherByCoords(lat: number, long: number, lang: string) {
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=${this.apiKey}&units=metric&lang=${lang}`;
+        try {
+            const response = await fetch(apiUrl, {
+                method: "GET",
+            });
+            if (!response.ok) {
+                throw new Error(`Error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
             return result;
         } catch (err) {
             alert(`Ошибка: ${err}`);

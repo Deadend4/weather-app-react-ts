@@ -6,10 +6,20 @@
     background-color: var(--bg-color);
     height: 100vh;
     padding: 5rem 10vw;
+    color: var(--text-color);
 }
 
-.appName {
+.appLogo {
     color: var(--main-color);
     font-size: var(--heading-fs);
     font-weight: 600;
+}
+
+.list {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.card {
+    border: 2px solid var(--accent-color);
 }

@@ -1,18 +1,21 @@
 import styles from "./InputCity.module.css";
-import { useState } from "react";
 import WeatherClient from "../WeatherClient/WeatherClient";
 
-export default function InputCity() {
-    const [data, setData] = useState({ data: [] });
-    const weatherClient = new WeatherClient();
+export default function InputCity({
+    weatherClient,
+}: {
+    weatherClient: WeatherClient;
+}) {
     interface HandleClickProps {
         lang: string;
         city: string;
     }
     async function handleClick({ city, lang }: HandleClickProps) {
-        console.log(weatherClient.getWeatherInCity(city, lang));
-    }
+        const currentCity = await weatherClient.getWeatherInCity(city, lang);
 
+        console.log(currentCity.name);
+    }
+    console.log("InputCity");
     return (
         <form className={styles.form}>
             <input
