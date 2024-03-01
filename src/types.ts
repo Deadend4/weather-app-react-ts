@@ -33,7 +33,7 @@ export default interface GetWeatherResponse {
   weather: [
     {
       description: string;
-      icon: string;
+      icon: `${number}d` | `${number}n`;
       id: number;
       main: string;
     }

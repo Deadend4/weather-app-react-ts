@@ -1,6 +1,6 @@
 import GetWeatherResponse from "../../types";
 
-export default class WeatherClient {
+export class WeatherClient {
   apiKey = process.env.REACT_APP_WEATHER_API_KEY;
   public async getWeatherInCity(
     city: string,
@@ -45,4 +45,12 @@ export default class WeatherClient {
       return null;
     }
   }
+
+  getWeatherIcon(iconId: `${number}d` | `${number}n`) {
+    return `https://openweathermap.org/img/wn/${iconId}@4x.png`;
+  }
 }
+
+const weatherClient = new WeatherClient();
+
+export default weatherClient;

@@ -1,11 +1,9 @@
 import CityInput from "../CityInput";
 import styles from "./WeatherApp.module.css";
-import WeatherClient from "../WeatherClient/WeatherClient";
+import weatherClient from "../WeatherClient/WeatherClient";
 import { useEffect, useState } from "react";
 import GetWeatherResponse from "../../types";
 import List from "../List";
-
-const weatherClient = new WeatherClient();
 
 export default function WeatherApp() {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
@@ -31,16 +29,24 @@ export default function WeatherApp() {
 
   function addCardToState(newCard: GetWeatherResponse | null) {
     if (newCard !== null) {
-      setCards((cards) => [...cards, newCard]);
+      const filteredCards = cards.filter((item) => item.id !== newCard.id);
+      setCards((cards) => [newCard, ...filteredCards]);
     }
+  }
+
+  function deleteCardFromState(currentCard: GetWeatherResponse) {
+    const filteredCards = cards.filter((item) => item.id !== currentCard.id);
+    setCards((cards) => [...filteredCards]);
   }
 
   return (
     <div className={styles.page}>
       <span className={styles.appLogo}>Погода</span>
-      <CityInput weatherClient={weatherClient} onSubmit={addCardToState} />
+      <CityInput onSubmit={addCardToState} />
       <ul className={styles.list}>
-        {cards.length > 0 && <List cards={cards} />}
+        {cards.length > 0 && (
+          <List cards={cards} handleDeleteClick={deleteCardFromState} />
+        )}
       </ul>
     </div>
   );

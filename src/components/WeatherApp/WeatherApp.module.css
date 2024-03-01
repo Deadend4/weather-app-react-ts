@@ -4,7 +4,7 @@
   align-items: center;
   gap: 2rem;
   background-color: var(--bg-color);
-  height: 100vh;
+  min-height: 100vh;
   padding: 5rem 10vw;
   color: var(--text-color);
 }
@@ -17,9 +17,9 @@
 
 .list {
   display: flex;
-  flex-flow: column nowrap;
-}
-
-.card {
-  border: 2px solid var(--accent-color);
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+  gap: 1rem;
+  padding: 0;
 }
