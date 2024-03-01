@@ -1,24 +1,47 @@
-import InputCity from "../InputCity";
+import CityInput from "../CityInput";
 import styles from "./WeatherApp.module.css";
+import WeatherClient from "../WeatherClient/WeatherClient";
+import { useEffect, useState } from "react";
+import GetWeatherResponse from "../../types";
+import List from "../List";
+
+const weatherClient = new WeatherClient();
 
 export default function WeatherApp() {
-    interface Coordinates {
-        latitude: number;
-        longitude: number;
-    }
-    function printCoords({ latitude, longitude }: Coordinates) {
-        // console.log(`latitude: ${latitude}, longitude: ${longitude}`);
-    }
-    navigator.geolocation.getCurrentPosition((position) => {
-        printCoords({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-        });
+  const [cards, setCards] = useState<GetWeatherResponse[]>([]);
+
+  function getWeatherOnLoad() {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const currentCity = await weatherClient.getWeatherByCoords(
+        position.coords.latitude,
+        position.coords.longitude,
+        "ru"
+      );
+      if (currentCity !== null) {
+        setCards(() => [currentCity]);
+      }
     });
-    return (
-        <div className={styles.page}>
-            <span className={styles.appName}>Погода</span>
-            <InputCity />
-        </div>
-    );
+  }
+  useEffect(() => {
+    getWeatherOnLoad();
+    return () => {
+      setCards([]);
+    };
+  }, []);
+
+  function addCardToState(newCard: GetWeatherResponse | null) {
+    if (newCard !== null) {
+      setCards((cards) => [...cards, newCard]);
+    }
+  }
+
+  return (
+    <div className={styles.page}>
+      <span className={styles.appLogo}>Погода</span>
+      <CityInput weatherClient={weatherClient} onSubmit={addCardToState} />
+      <ul className={styles.list}>
+        {cards.length > 0 && <List cards={cards} />}
+      </ul>
+    </div>
+  );
 }
