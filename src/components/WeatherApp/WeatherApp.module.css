@@ -1,25 +1,25 @@
 .page {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    gap: 2rem;
-    background-color: var(--bg-color);
-    height: 100vh;
-    padding: 5rem 10vw;
-    color: var(--text-color);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: 2rem;
+  background-color: var(--bg-color);
+  height: 100vh;
+  padding: 5rem 10vw;
+  color: var(--text-color);
 }
 
 .appLogo {
-    color: var(--main-color);
-    font-size: var(--heading-fs);
-    font-weight: 600;
+  color: var(--main-color);
+  font-size: var(--heading-fs);
+  font-weight: 600;
 }
 
 .list {
-    display: flex;
-    flex-flow: row nowrap;
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .card {
-    border: 2px solid var(--accent-color);
+  border: 2px solid var(--accent-color);
 }
