@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import GetWeatherResponse from "../../types";
-import WeatherClient from "../WeatherClient/WeatherClient";
+import weatherClient from "../WeatherClient/WeatherClient";
 import styles from "./CityInput.module.css";
 
 type OnSubmitFunction = (weather: GetWeatherResponse | null) => void;
@@ -9,11 +9,10 @@ type Inputs = {
 };
 
 interface CityInputProps {
-  weatherClient: WeatherClient;
   onSubmit: OnSubmitFunction;
 }
-export default function CityInput({ weatherClient, onSubmit }: CityInputProps) {
-  const { register, handleSubmit } = useForm<Inputs>();
+export default function CityInput({ onSubmit }: CityInputProps) {
+  const { register, handleSubmit, resetField } = useForm<Inputs>();
 
   const formOnSubmit = async (data: Inputs) => {
     const currentCity = await weatherClient.getWeatherInCity(
@@ -21,6 +20,7 @@ export default function CityInput({ weatherClient, onSubmit }: CityInputProps) {
       "ru"
     );
     onSubmit(currentCity);
+    resetField("cityName");
   };
   return (
     <form className={styles.form} onSubmit={handleSubmit(formOnSubmit)}>
@@ -28,9 +28,12 @@ export default function CityInput({ weatherClient, onSubmit }: CityInputProps) {
         type="input"
         className={styles.cityInput}
         placeholder="Введите название города"
+        required
         {...register("cityName", { required: true })}
       />
-      <input type="submit" value="Применить" className={styles.submitButton} />
+      <button type="submit" className={styles.submitButton}>
+        <img src="search.svg" alt="Поиск"></img>
+      </button>
     </form>
   );
 }
