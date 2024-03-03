@@ -4,6 +4,7 @@ import weatherClient from "../WeatherClient/WeatherClient";
 import { useEffect, useState } from "react";
 import GetWeatherResponse from "../../types";
 import List from "../List";
+import TranslationSelect from "../TranslationSelect";
 
 export default function WeatherApp() {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
@@ -41,6 +42,7 @@ export default function WeatherApp() {
 
   return (
     <div className={styles.page}>
+      <TranslationSelect />
       <span className={styles.appLogo}>Погода</span>
       <CityInput onSubmit={addCardToState} />
       <ul className={styles.list}>

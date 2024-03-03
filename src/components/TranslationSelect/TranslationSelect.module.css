@@ -1,0 +1,47 @@
+.translation {
+  display: flex;
+  flex-flow: row nowrap;
+  position: absolute;
+  top: 4%;
+  right: 5%;
+}
+.toggle {
+  visibility: hidden;
+}
+
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 1px solid var(--main-color);
+  border-radius: 4px;
+  padding: 0.1rem 0;
+}
+
+.toggleLabel::before,
+.toggleLabel::after {
+  padding: 0.1rem 0.5rem;
+  height: 100%;
+  transition: background ease 0.2s;
+}
+.toggleLabel::before {
+  content: "РУС";
+
+  border-radius: 3px 0 0 3px;
+  background: var(--main-color);
+}
+.toggleLabel::after {
+  content: "АНГ";
+  border-radius: 0 3px 3px 0;
+}
+
+.toggle:checked ~ .toggleLabel::before {
+  content: "RUS";
+  background: transparent;
+}
+
+.toggle:checked ~ .toggleLabel::after {
+  content: "ENG";
+
+  background: var(--main-color);
+}
