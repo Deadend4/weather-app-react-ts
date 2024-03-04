@@ -1,20 +1,26 @@
 import CityInput from "../CityInput";
 import styles from "./WeatherApp.module.css";
 import weatherClient from "../WeatherClient/WeatherClient";
-import { useEffect, useState } from "react";
-import GetWeatherResponse from "../../types";
+import { useEffect, useState, useContext } from "react";
+import GetWeatherResponse, { Translation, Locale } from "../../types";
 import List from "../List";
 import TranslationSelect from "../TranslationSelect";
+import ruTranslation from "../../localization/ru.json";
+import enTranslation from "../../localization/en.json";
+import { LocaleContext } from "../LocaleContext";
 
 export default function WeatherApp() {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
+  const [locale, setLocale] = useState<Locale>(
+    localStorage.getItem("locale") as Locale
+  );
 
-  function getWeatherOnLoad() {
+  function getWeatherOnLoad(locale: Locale) {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const currentCity = await weatherClient.getWeatherByCoords(
         position.coords.latitude,
         position.coords.longitude,
-        "ru"
+        locale
       );
       if (currentCity !== null) {
         setCards(() => [currentCity]);
@@ -22,7 +28,7 @@ export default function WeatherApp() {
     });
   }
   useEffect(() => {
-    getWeatherOnLoad();
+    getWeatherOnLoad(locale);
     return () => {
       setCards([]);
     };
@@ -40,16 +46,42 @@ export default function WeatherApp() {
     setCards((cards) => [...filteredCards]);
   }
 
+  function switchLanguage(value: Locale): void {
+    setLocale(value);
+    localStorage.setItem("locale", value);
+    getWeatherOnLoad(value);
+  }
+
+  function getCurrentTranslation(value: Locale): Translation {
+    switch (value) {
+      case "ru":
+        return ruTranslation;
+      case "en":
+        return enTranslation;
+      default:
+        return ruTranslation;
+    }
+  }
+  const currentTranslation = getCurrentTranslation(locale);
   return (
-    <div className={styles.page}>
-      <TranslationSelect />
-      <span className={styles.appLogo}>Погода</span>
-      <CityInput onSubmit={addCardToState} />
-      <ul className={styles.list}>
-        {cards.length > 0 && (
-          <List cards={cards} handleDeleteClick={deleteCardFromState} />
-        )}
-      </ul>
-    </div>
+    <LocaleContext.Provider value={locale}>
+      <div className={styles.page}>
+        <TranslationSelect onSwitchChange={switchLanguage} />
+        <span className={styles.appLogo}>{currentTranslation.heading}</span>
+        <CityInput
+          onSubmit={addCardToState}
+          placeholder={currentTranslation.placeholder}
+        />
+        <ul className={styles.list}>
+          {cards.length > 0 && (
+            <List
+              cards={cards}
+              handleDeleteClick={deleteCardFromState}
+              translation={currentTranslation}
+            />
+          )}
+        </ul>
+      </div>
+    </LocaleContext.Provider>
   );
 }

@@ -1,7 +1,11 @@
 import { format } from "date-fns";
 import { ru } from "date-fns/locale/ru";
+import { enUS } from "date-fns/locale/en-US";
 import styles from "./Card.module.css";
 import Bin from "../Bin";
+import { Locale, Translation } from "../../types";
+import { LocaleContext } from "../LocaleContext";
+import { useContext } from "react";
 
 interface CardProps {
   city: string;
@@ -11,6 +15,7 @@ interface CardProps {
   timestamp: number;
   icon: string;
   onBinClick: () => void;
+  translation: Translation;
 }
 
 export default function Card({
@@ -21,10 +26,16 @@ export default function Card({
   icon,
   timestamp,
   onBinClick,
+  translation,
 }: CardProps) {
+  const locale = useContext(LocaleContext);
   const itemDate = new Date(timestamp);
-  const formattedDate = format(itemDate, "d MMMM, EEEE", { locale: ru });
-  const formattedTime = format(itemDate, "kk:mm", { locale: ru });
+  const formattedDate = format(itemDate, "d MMMM, EEEE", {
+    locale: locale === "ru" ? ru : enUS,
+  });
+  const formattedTime = format(itemDate, "kk:mm", {
+    locale: locale === "ru" ? ru : enUS,
+  });
 
   const handleBinClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -42,7 +53,9 @@ export default function Card({
       <span className={styles.description}>{description}</span>
       <img src={icon} alt={description} />
       <span className={styles.temperature}>{Math.round(temp)}°С</span>
-      <span>Ощущается: {Math.round(feelsLike)}°С</span>
+      <span>
+        {translation.feelsLike} {Math.round(feelsLike)}°С
+      </span>
     </li>
   );
 }

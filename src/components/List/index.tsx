@@ -1,4 +1,4 @@
-import GetWeatherResponse from "../../types";
+import GetWeatherResponse, { Locale, Translation } from "../../types";
 import Card from "../Card";
 import weatherClient from "../WeatherClient/WeatherClient";
 import { capitalizeFirstLetter } from "../../utils";
@@ -8,9 +8,14 @@ const DATE_MULTIPLIER = 1000;
 interface ListProps {
   cards: GetWeatherResponse[];
   handleDeleteClick: (currentCard: GetWeatherResponse) => void;
+  translation: Translation;
 }
 
-export default function List({ cards, handleDeleteClick }: ListProps) {
+export default function List({
+  cards,
+  handleDeleteClick,
+  translation,
+}: ListProps) {
   const renderList = cards.map((item) => {
     const onBinClick = () => handleDeleteClick(item);
     return (
@@ -23,6 +28,7 @@ export default function List({ cards, handleDeleteClick }: ListProps) {
         temp={item.main.temp}
         timestamp={item.dt * DATE_MULTIPLIER}
         onBinClick={onBinClick}
+        translation={translation}
       />
     );
   });
