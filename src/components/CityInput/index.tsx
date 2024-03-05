@@ -2,8 +2,7 @@ import { useForm } from "react-hook-form";
 import GetWeatherResponse from "../../types";
 import weatherClient from "../WeatherClient/WeatherClient";
 import styles from "./CityInput.module.css";
-import { LocaleContext } from "../LocaleContext";
-import { useContext } from "react";
+import { useLocale } from "../LocaleContext";
 
 type OnSubmitFunction = (weather: GetWeatherResponse | null) => void;
 type Inputs = {
@@ -16,7 +15,7 @@ interface CityInputProps {
 }
 export default function CityInput({ onSubmit, placeholder }: CityInputProps) {
   const { register, handleSubmit, resetField } = useForm<Inputs>();
-  const { locale } = useContext(LocaleContext);
+  const { locale } = useLocale();
   const formOnSubmit = async (data: Inputs) => {
     const currentCity = await weatherClient.getWeatherInCity(
       data.cityName,

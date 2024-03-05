@@ -1,11 +1,8 @@
 import { format } from "date-fns";
-import { ru } from "date-fns/locale/ru";
-import { enUS } from "date-fns/locale/en-US";
 import styles from "./Card.module.css";
 import Bin from "../Bin";
-import { Locale, Translation } from "../../types";
-import { LocaleContext } from "../LocaleContext";
-import { useContext } from "react";
+import { useLocale } from "../LocaleContext";
+import { getDateLocale } from "../../utils";
 
 interface CardProps {
   city: string;
@@ -26,19 +23,8 @@ export default function Card({
   timestamp,
   onBinClick,
 }: CardProps) {
-  const { locale, currentTranslation } = useContext(LocaleContext);
+  const { locale, currentTranslation } = useLocale();
   const itemDate = new Date(timestamp);
-
-  function getDateLocale(locale: Locale) {
-    switch (locale) {
-      case "ru":
-        return ru;
-      case "en":
-        return enUS;
-      default:
-        break;
-    }
-  }
 
   const formattedDate = format(itemDate, "d MMMM, EEEE", {
     locale: getDateLocale(locale),

@@ -1,26 +1,18 @@
 import CityInput from "../CityInput";
 import styles from "./WeatherApp.module.css";
 import weatherClient from "../WeatherClient/WeatherClient";
-import { useEffect, useState, useReducer } from "react";
-import GetWeatherResponse, { Translation, Locale } from "../../types";
+import { useEffect, useState } from "react";
+import GetWeatherResponse, { Locale } from "../../types";
 import List from "../List";
 import TranslationSelect from "../TranslationSelect";
-import ruTranslation from "../../localization/ru.json";
-import enTranslation from "../../localization/en.json";
-import { LocaleContext } from "../LocaleContext";
+import { useLocale } from "../LocaleContext";
 
-export default function WeatherApp() {
+interface WeatherAppProps {
+  onChangeLocale: (loc: Locale) => void;
+}
+export default function WeatherApp({ onChangeLocale }: WeatherAppProps) {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
-  const [locale, dispatch] = useReducer(localeReducer, "ru");
-
-  function localeReducer(locale: Locale, action: Locale) {
-    return action;
-  }
-
-  function handleChangeLocale(loc: Locale) {
-    dispatch(loc);
-  }
-
+  const { locale, currentTranslation } = useLocale();
   function getWeatherOnLoad(locale: Locale) {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const currentCity = await weatherClient.getWeatherByCoords(
@@ -53,37 +45,24 @@ export default function WeatherApp() {
   }
 
   function switchLanguage(value: Locale): void {
-    handleChangeLocale(value);
+    onChangeLocale(value);
     localStorage.setItem("locale", value);
     getWeatherOnLoad(value);
   }
 
-  function getCurrentTranslation(value: Locale): Translation {
-    switch (value) {
-      case "ru":
-        return ruTranslation;
-      case "en":
-        return enTranslation;
-      default:
-        return ruTranslation;
-    }
-  }
-  const currentTranslation = getCurrentTranslation(locale);
   return (
-    <LocaleContext.Provider value={{ locale, currentTranslation }}>
-      <div className={styles.page}>
-        <TranslationSelect onSwitchChange={switchLanguage} />
-        <span className={styles.appLogo}>{currentTranslation.heading}</span>
-        <CityInput
-          onSubmit={addCardToState}
-          placeholder={currentTranslation.placeholder}
-        />
-        <ul className={styles.list}>
-          {cards.length > 0 && (
-            <List cards={cards} handleDeleteClick={deleteCardFromState} />
-          )}
-        </ul>
-      </div>
-    </LocaleContext.Provider>
+    <div className={styles.page}>
+      <TranslationSelect onSwitchChange={switchLanguage} />
+      <span className={styles.appLogo}>{currentTranslation.heading}</span>
+      <CityInput
+        onSubmit={addCardToState}
+        placeholder={currentTranslation.placeholder}
+      />
+      <ul className={styles.list}>
+        {cards.length > 0 && (
+          <List cards={cards} handleDeleteClick={deleteCardFromState} />
+        )}
+      </ul>
+    </div>
   );
 }

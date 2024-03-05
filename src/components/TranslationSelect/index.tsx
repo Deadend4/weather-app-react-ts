@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { Locale } from "../../types";
-import { LocaleContext } from "../LocaleContext";
+import { useLocale } from "../LocaleContext";
 import styles from "./TranslationSelect.module.css";
 
 interface TranslationSelectProps {
@@ -9,7 +8,7 @@ interface TranslationSelectProps {
 export default function TranslationSelect({
   onSwitchChange,
 }: TranslationSelectProps) {
-  const { locale } = useContext(LocaleContext);
+  const { locale } = useLocale();
   return (
     <div className={styles.translation}>
       <input

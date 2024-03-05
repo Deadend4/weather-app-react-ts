@@ -1,8 +1,8 @@
 import "./App.css";
-import WeatherApp from "./components/WeatherApp";
+import LocaleProvider from "./components/LocaleProvider";
 
 function App() {
-    return <WeatherApp />;
+  return <LocaleProvider />;
 }
 
 export default App;
