@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import GetWeatherResponse, { Locale } from "../../types";
+import GetWeatherResponse from "../../types";
 import weatherClient from "../WeatherClient/WeatherClient";
 import styles from "./CityInput.module.css";
 import { LocaleContext } from "../LocaleContext";

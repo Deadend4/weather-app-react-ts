@@ -1,4 +1,4 @@
-import GetWeatherResponse, { Locale, Translation } from "../../types";
+import GetWeatherResponse from "../../types";
 import Card from "../Card";
 import weatherClient from "../WeatherClient/WeatherClient";
 import { capitalizeFirstLetter } from "../../utils";

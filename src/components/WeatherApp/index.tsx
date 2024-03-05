@@ -1,7 +1,7 @@
 import CityInput from "../CityInput";
 import styles from "./WeatherApp.module.css";
 import weatherClient from "../WeatherClient/WeatherClient";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useReducer } from "react";
 import GetWeatherResponse, { Translation, Locale } from "../../types";
 import List from "../List";
 import TranslationSelect from "../TranslationSelect";
@@ -11,9 +11,15 @@ import { LocaleContext } from "../LocaleContext";
 
 export default function WeatherApp() {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
-  const [locale, setLocale] = useState<Locale>(
-    localStorage.getItem("locale") as Locale
-  );
+  const [locale, dispatch] = useReducer(localeReducer, "ru");
+
+  function localeReducer(locale: Locale, action: Locale) {
+    return action;
+  }
+
+  function handleChangeLocale(loc: Locale) {
+    dispatch(loc);
+  }
 
   function getWeatherOnLoad(locale: Locale) {
     navigator.geolocation.getCurrentPosition(async (position) => {
@@ -37,7 +43,7 @@ export default function WeatherApp() {
   function addCardToState(newCard: GetWeatherResponse | null) {
     if (newCard !== null) {
       const filteredCards = cards.filter((item) => item.id !== newCard.id);
-      setCards((cards) => [newCard, ...filteredCards]);
+      setCards(() => [newCard, ...filteredCards]);
     }
   }
 
@@ -47,7 +53,7 @@ export default function WeatherApp() {
   }
 
   function switchLanguage(value: Locale): void {
-    setLocale(value);
+    handleChangeLocale(value);
     localStorage.setItem("locale", value);
     getWeatherOnLoad(value);
   }
