@@ -16,7 +16,7 @@ interface CityInputProps {
 }
 export default function CityInput({ onSubmit, placeholder }: CityInputProps) {
   const { register, handleSubmit, resetField } = useForm<Inputs>();
-  const locale = useContext(LocaleContext);
+  const { locale } = useContext(LocaleContext);
   const formOnSubmit = async (data: Inputs) => {
     const currentCity = await weatherClient.getWeatherInCity(
       data.cityName,

@@ -15,7 +15,6 @@ interface CardProps {
   timestamp: number;
   icon: string;
   onBinClick: () => void;
-  translation: Translation;
 }
 
 export default function Card({
@@ -26,15 +25,26 @@ export default function Card({
   icon,
   timestamp,
   onBinClick,
-  translation,
 }: CardProps) {
-  const locale = useContext(LocaleContext);
+  const { locale, currentTranslation } = useContext(LocaleContext);
   const itemDate = new Date(timestamp);
+
+  function getDateLocale(locale: Locale) {
+    switch (locale) {
+      case "ru":
+        return ru;
+      case "en":
+        return enUS;
+      default:
+        break;
+    }
+  }
+
   const formattedDate = format(itemDate, "d MMMM, EEEE", {
-    locale: locale === "ru" ? ru : enUS,
+    locale: getDateLocale(locale),
   });
   const formattedTime = format(itemDate, "kk:mm", {
-    locale: locale === "ru" ? ru : enUS,
+    locale: getDateLocale(locale),
   });
 
   const handleBinClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -43,7 +53,7 @@ export default function Card({
   };
 
   return (
-    <li className={styles.card} onClick={() => alert("Card Click")}>
+    <li className={styles.card}>
       <button type="button" className={styles.bin} onClick={handleBinClick}>
         <Bin />
       </button>
@@ -54,7 +64,7 @@ export default function Card({
       <img src={icon} alt={description} />
       <span className={styles.temperature}>{Math.round(temp)}°С</span>
       <span>
-        {translation.feelsLike} {Math.round(feelsLike)}°С
+        {currentTranslation.feelsLike} {Math.round(feelsLike)}°С
       </span>
     </li>
   );

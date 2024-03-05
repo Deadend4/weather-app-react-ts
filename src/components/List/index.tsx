@@ -8,14 +8,9 @@ const DATE_MULTIPLIER = 1000;
 interface ListProps {
   cards: GetWeatherResponse[];
   handleDeleteClick: (currentCard: GetWeatherResponse) => void;
-  translation: Translation;
 }
 
-export default function List({
-  cards,
-  handleDeleteClick,
-  translation,
-}: ListProps) {
+export default function List({ cards, handleDeleteClick }: ListProps) {
   const renderList = cards.map((item) => {
     const onBinClick = () => handleDeleteClick(item);
     return (
@@ -28,7 +23,6 @@ export default function List({
         temp={item.main.temp}
         timestamp={item.dt * DATE_MULTIPLIER}
         onBinClick={onBinClick}
-        translation={translation}
       />
     );
   });

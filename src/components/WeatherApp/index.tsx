@@ -43,7 +43,7 @@ export default function WeatherApp() {
 
   function deleteCardFromState(currentCard: GetWeatherResponse) {
     const filteredCards = cards.filter((item) => item.id !== currentCard.id);
-    setCards((cards) => [...filteredCards]);
+    setCards(() => [...filteredCards]);
   }
 
   function switchLanguage(value: Locale): void {
@@ -64,7 +64,7 @@ export default function WeatherApp() {
   }
   const currentTranslation = getCurrentTranslation(locale);
   return (
-    <LocaleContext.Provider value={locale}>
+    <LocaleContext.Provider value={{ locale, currentTranslation }}>
       <div className={styles.page}>
         <TranslationSelect onSwitchChange={switchLanguage} />
         <span className={styles.appLogo}>{currentTranslation.heading}</span>
@@ -74,11 +74,7 @@ export default function WeatherApp() {
         />
         <ul className={styles.list}>
           {cards.length > 0 && (
-            <List
-              cards={cards}
-              handleDeleteClick={deleteCardFromState}
-              translation={currentTranslation}
-            />
+            <List cards={cards} handleDeleteClick={deleteCardFromState} />
           )}
         </ul>
       </div>

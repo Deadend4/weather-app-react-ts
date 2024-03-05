@@ -9,7 +9,7 @@ interface TranslationSelectProps {
 export default function TranslationSelect({
   onSwitchChange,
 }: TranslationSelectProps) {
-  const locale = useContext(LocaleContext);
+  const { locale } = useContext(LocaleContext);
   return (
     <div className={styles.translation}>
       <input
