@@ -2,18 +2,21 @@ import CityInput from "../CityInput";
 import styles from "./WeatherApp.module.css";
 import weatherClient from "../WeatherClient/WeatherClient";
 import { useEffect, useState } from "react";
-import GetWeatherResponse from "../../types";
+import GetWeatherResponse, { Locale } from "../../types";
 import List from "../List";
+import TranslationSelect from "../TranslationSelect";
+import { useLocale, useLocaleDispatch } from "../LocaleContext";
 
 export default function WeatherApp() {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
-
-  function getWeatherOnLoad() {
+  const { locale, currentTranslation } = useLocale();
+  const { dispatch } = useLocaleDispatch();
+  function getWeatherOnLoad(locale: Locale) {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const currentCity = await weatherClient.getWeatherByCoords(
         position.coords.latitude,
         position.coords.longitude,
-        "ru"
+        locale
       );
       if (currentCity !== null) {
         setCards(() => [currentCity]);
@@ -21,7 +24,7 @@ export default function WeatherApp() {
     });
   }
   useEffect(() => {
-    getWeatherOnLoad();
+    getWeatherOnLoad(locale);
     return () => {
       setCards([]);
     };
@@ -30,19 +33,29 @@ export default function WeatherApp() {
   function addCardToState(newCard: GetWeatherResponse | null) {
     if (newCard !== null) {
       const filteredCards = cards.filter((item) => item.id !== newCard.id);
-      setCards((cards) => [newCard, ...filteredCards]);
+      setCards(() => [newCard, ...filteredCards]);
     }
   }
 
   function deleteCardFromState(currentCard: GetWeatherResponse) {
     const filteredCards = cards.filter((item) => item.id !== currentCard.id);
-    setCards((cards) => [...filteredCards]);
+    setCards(() => [...filteredCards]);
+  }
+
+  function switchLanguage(value: Locale): void {
+    dispatch(value);
+    localStorage.setItem("locale", value);
+    getWeatherOnLoad(value);
   }
 
   return (
     <div className={styles.page}>
-      <span className={styles.appLogo}>Погода</span>
-      <CityInput onSubmit={addCardToState} />
+      <TranslationSelect onSwitchChange={switchLanguage} />
+      <span className={styles.appLogo}>{currentTranslation.heading}</span>
+      <CityInput
+        onSubmit={addCardToState}
+        placeholder={currentTranslation.placeholder}
+      />
       <ul className={styles.list}>
         {cards.length > 0 && (
           <List cards={cards} handleDeleteClick={deleteCardFromState} />

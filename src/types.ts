@@ -44,3 +44,11 @@ export default interface GetWeatherResponse {
     speed: number;
   };
 }
+
+export interface Translation {
+  heading: string;
+  placeholder: string;
+  feelsLike: string;
+}
+
+export type Locale = "ru" | "en";

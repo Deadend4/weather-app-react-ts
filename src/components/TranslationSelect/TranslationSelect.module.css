@@ -1,0 +1,45 @@
+.translation {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 4%;
+  right: 5%;
+  width: 80px;
+  border: 2px solid var(--main-color);
+  border-radius: 4px;
+}
+.toggle {
+  position: absolute;
+  visibility: hidden;
+}
+
+.ruLang {
+  color: white;
+  width: 40px;
+}
+.ruLang::after {
+  content: "RUS";
+  padding: 0rem 0.3rem;
+}
+.enLang {
+  color: white;
+  width: 40px;
+}
+.enLang::after {
+  content: "АНГ";
+  padding: 0 0.3rem;
+}
+
+.toggle:checked + .ruLang::after {
+  content: "РУС";
+  border-radius: 1px 0 0 1px;
+  background: var(--main-color);
+}
+
+.toggle:checked + .enLang::after {
+  content: "ENG";
+  border-radius: 0 1px 1px 0;
+  background: var(--main-color);
+}
