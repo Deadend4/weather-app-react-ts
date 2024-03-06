@@ -5,14 +5,12 @@ import { useEffect, useState } from "react";
 import GetWeatherResponse, { Locale } from "../../types";
 import List from "../List";
 import TranslationSelect from "../TranslationSelect";
-import { useLocale } from "../LocaleContext";
+import { useLocale, useLocaleDispatch } from "../LocaleContext";
 
-interface WeatherAppProps {
-  onChangeLocale: (loc: Locale) => void;
-}
-export default function WeatherApp({ onChangeLocale }: WeatherAppProps) {
+export default function WeatherApp() {
   const [cards, setCards] = useState<GetWeatherResponse[]>([]);
   const { locale, currentTranslation } = useLocale();
+  const { dispatch } = useLocaleDispatch();
   function getWeatherOnLoad(locale: Locale) {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const currentCity = await weatherClient.getWeatherByCoords(
@@ -45,7 +43,7 @@ export default function WeatherApp({ onChangeLocale }: WeatherAppProps) {
   }
 
   function switchLanguage(value: Locale): void {
-    onChangeLocale(value);
+    dispatch(value);
     localStorage.setItem("locale", value);
     getWeatherOnLoad(value);
   }

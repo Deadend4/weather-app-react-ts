@@ -1,18 +1,25 @@
-import WeatherApp from "../WeatherApp";
+import { useReducer } from "react";
 import { Locale } from "../../types";
-import { LocaleContext, useLocaleReducer } from "../LocaleContext";
+import { LocaleContext, LocaleDispatchContext } from "../LocaleContext";
 import { getCurrentTranslation } from "../../utils";
 
-export default function LocaleProvider() {
-  const [locale, dispatch] = useLocaleReducer();
+export default function LocaleProvider({
+  children,
+}: {
+  children: JSX.Element;
+}) {
+  const [locale, dispatch] = useReducer(localeReducer, "ru");
 
-  function handleChangeLocale(loc: Locale) {
-    dispatch(loc);
+  function localeReducer(locale: Locale, action: Locale) {
+    return action;
   }
+
   const currentTranslation = getCurrentTranslation(locale);
   return (
     <LocaleContext.Provider value={{ locale, currentTranslation }}>
-      <WeatherApp onChangeLocale={handleChangeLocale} />
+      <LocaleDispatchContext.Provider value={{ dispatch }}>
+        {children}
+      </LocaleDispatchContext.Provider>
     </LocaleContext.Provider>
   );
 }
