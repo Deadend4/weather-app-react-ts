@@ -1,18 +1,13 @@
-import { useReducer } from "react";
-import { Locale } from "../../types";
-import { LocaleContext, LocaleDispatchContext } from "../LocaleContext";
+import { PropsWithChildren } from "react";
+import {
+  LocaleContext,
+  LocaleDispatchContext,
+  useLocaleReducer,
+} from "../LocaleContext";
 import { getCurrentTranslation } from "../../utils";
 
-export default function LocaleProvider({
-  children,
-}: {
-  children: JSX.Element;
-}) {
-  const [locale, dispatch] = useReducer(localeReducer, "ru");
-
-  function localeReducer(locale: Locale, action: Locale) {
-    return action;
-  }
+export default function LocaleProvider({ children }: PropsWithChildren) {
+  const [locale, dispatch] = useLocaleReducer();
 
   const currentTranslation = getCurrentTranslation(locale);
   return (
