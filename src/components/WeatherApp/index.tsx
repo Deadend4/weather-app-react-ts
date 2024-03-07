@@ -28,6 +28,7 @@ export default function WeatherApp() {
     return () => {
       setCards([]);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function addCardToState(newCard: GetWeatherResponse | null) {
