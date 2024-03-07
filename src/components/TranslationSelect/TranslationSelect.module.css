@@ -43,3 +43,11 @@
   border-radius: 0 1px 1px 0;
   background: var(--main-color);
 }
+
+.toggle:checked + .ruLang ~ .enLang:hover {
+  cursor: pointer;
+}
+
+.toggle:not(:checked) + .ruLang:hover {
+  cursor: pointer;
+}
