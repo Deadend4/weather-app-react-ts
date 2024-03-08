@@ -10,7 +10,7 @@ interface CardProps {
   temp: number;
   feelsLike: number;
   timestamp: number;
-  icon: string;
+  icon: string | undefined;
   onBinClick: () => void;
 }
 
@@ -37,7 +37,6 @@ export default function Card({
     e.stopPropagation();
     onBinClick();
   };
-
   return (
     <li className={styles.card}>
       <button type="button" className={styles.bin} onClick={handleBinClick}>
